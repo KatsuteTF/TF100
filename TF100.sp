@@ -48,6 +48,9 @@ public void OnPluginStart(){
     FindConVar("net_maxfragments").SetInt(1260);
     FindConVar("net_maxroutable").SetInt(1260);
 
+    FindConVar("mp_ik").SetBool(false);
+    FindConVar("sv_lagflushbonecache").SetBool(false);
+
     // Edicts
     FindConVar("sv_lowedict_action").SetInt(4);
     FindConVar("sv_lowedict_threshold").SetInt(32);
@@ -97,7 +100,7 @@ public void OnPluginStart(){
     DeleteEntities("point_spotlight");
 
     // Whitelist Patch https://github.com/sapphonie/tf2rue
-    GameData gamedata = LoadGameConfigFile("TF100"); // https://github.com/sapphonie/tf2rue/blob/main/gamedata/tf2.rue.txt
+    GameData gamedata = LoadGameConfigFile("tf2.100"); // https://github.com/sapphonie/tf2rue/blob/main/gamedata/tf2.rue.txt
     if(gamedata == null){
         SetFailState("Failed to load TF100 gamedata");
     }else{
@@ -133,7 +136,7 @@ public void DeleteEntity(const int entity){
 }
 
 public void DeleteEntities(const char[] classname){
-    int entity;
-    while((entity = FindEntityByClassname(entity, "classname")) != -1)
+    int entity = -1;
+    while((entity = FindEntityByClassname(entity, classname)) != -1)
         DeleteEntity(entity);
 }

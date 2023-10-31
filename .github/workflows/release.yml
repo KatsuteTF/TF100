@@ -1,0 +1,13 @@
+name: Release
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: Release Plugin
+    uses: KatsuteTF/Workflows/.github/workflows/release.yml@main
+    with:
+      file: TF100.sp
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,38 @@
+"Games"
+{
+    "tf"
+    {
+        "Signatures"
+        {
+            "CEconItemSystem::ReloadWhitelist"
+            {
+                "library"   "server"
+                "linux"     "@_ZN15CEconItemSystem15ReloadWhitelistEv"
+                "windows"   "\x55\x8B\xEC\x83\xEC\x0C\x53\x56\x57\x8B\xD9\xC6\x45\xFF\x01"
+            }
+        }
+        "MemPatches"
+        {
+            "CEconItemSystem::ReloadWhitelist::nopnop"
+            {
+                "signature"     "CEconItemSystem::ReloadWhitelist"
+                "linux"
+                {
+                    "offset"    "34h"
+                    // jnz
+                    "verify"    "\x74\x53"
+                    // nop nop
+                    "patch"     "\x90\x90"
+                }
+                "windows"
+                {
+                    "offset"    "45h"
+                    // jz
+                    "verify"    "\x74\x6C"
+                    // nop nop
+                    "patch"     "\x90\x90"
+                }
+            }
+        }
+    }
+}

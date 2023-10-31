@@ -1,0 +1,14 @@
+name: SourcePawn CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
+
+jobs:
+  ci:
+    name: SourcePawn CI
+    uses: KatsuteTF/Workflows/.github/workflows/ci.yml@main
+    with:
+      file: TF100.sp

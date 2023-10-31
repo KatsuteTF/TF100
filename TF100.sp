@@ -101,7 +101,7 @@ public void OnPluginStart(){
     if(gamedata == null){
         SetFailState("Failed to load TF100 gamedata");
     }else{
-        MemoryPatch mpatch = MemoryPatch.CreateFromConf(gd, "CEconItemSystem::ReloadWhitelist::nopnop");
+        MemoryPatch mpatch = MemoryPatch.CreateFromConf(gamedata, "CEconItemSystem::ReloadWhitelist::nopnop");
         if(!mpatch.Validate())
             ThrowError("Failed to verify CEconItemSystem::ReloadWhitelist::nopnop");
         mpatch.Enable();

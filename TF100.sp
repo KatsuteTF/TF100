@@ -4,7 +4,7 @@
 
 #include <sourcemod>
 #include <sdktools>
-#include <memorypatch>
+#include <sourcescramble>
 
 public Plugin myinfo = {
     name        = "TF100",
@@ -96,16 +96,16 @@ public void OnPluginStart(){
     DeleteEntities("info_particle_system");
     DeleteEntities("point_spotlight");
 
-    // // mp_tournament_whitelist patch https://github.com/sapphonie/tf2rue
-    // GameData gd = LoadGameConfigFile("TF100"); // https://github.com/sapphonie/tf2rue/blob/main/gamedata/tf2.rue.txt
-    // if(gd == null){
-    //     SetFailState("Failed to load TF100 gamedata");
-    // }else{
-    //     MemoryPatch tmpatch = MemoryPatch.CreateFromConf(gd, "CEconItemSystem::ReloadWhitelist::nopnop");
-    //     if(!tmpatch.Validate())
-    //         ThrowError("Failed to verify CEconItemSystem::ReloadWhitelist::nopnop");
-    //     tmpatch.Enable();
-    // }
+    // Whitelist Patch https://github.com/sapphonie/tf2rue
+    GameData gamedata = LoadGameConfigFile("TF100"); // https://github.com/sapphonie/tf2rue/blob/main/gamedata/tf2.rue.txt
+    if(gamedata == null){
+        SetFailState("Failed to load TF100 gamedata");
+    }else{
+        MemoryPatch mpatch = MemoryPatch.CreateFromConf(gd, "CEconItemSystem::ReloadWhitelist::nopnop");
+        if(!mpatch.Validate())
+            ThrowError("Failed to verify CEconItemSystem::ReloadWhitelist::nopnop");
+        mpatch.Enable();
+    }
 }
 
 public void OnEntityCreated(int entity, const char[] classname){

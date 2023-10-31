@@ -19,17 +19,13 @@
                 "linux"
                 {
                     "offset"    "34h"
-                    // jnz
                     "verify"    "\x74\x53"
-                    // nop nop
                     "patch"     "\x90\x90"
                 }
                 "windows"
                 {
                     "offset"    "45h"
-                    // jz
                     "verify"    "\x74\x6C"
-                    // nop nop
                     "patch"     "\x90\x90"
                 }
             }

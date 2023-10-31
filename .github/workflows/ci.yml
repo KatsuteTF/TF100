@@ -1,14 +1,27 @@
 name: SourcePawn CI
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-    types: [opened, reopened, synchronize]
+on: [push]
 
 jobs:
   ci:
     name: SourcePawn CI
-    uses: KatsuteTF/Workflows/.github/workflows/ci.yml@main
-    with:
-      file: TF100.sp
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install SourceMod
+        uses: KatsuteTF/Workflows/actions/setup-sourcepawn@main
+
+      - name: mkdir include
+        shell: bash
+        run: mkdir -p addons/sourcemod/include
+
+      - name: Install SourceScramble
+        uses: KatsuteTF/Workflows/actions/curl@main
+        with:
+          url: https://raw.githubusercontent.com/nosoop/SMExt-SourceScramble/master/scripting/include/sourcescramble.inc
+          file: addons/sourcemod/include/sourcescramble.inc
+
+      - name: Compile Plugin
+        run: |
+          spcomp -i addons/sourcemod/include TF100.sp

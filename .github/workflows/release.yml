@@ -6,8 +6,30 @@ on:
 jobs:
   release:
     name: Release Plugin
-    uses: KatsuteTF/Workflows/.github/workflows/release.yml@main
-    with:
-      file: TF100.sp
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install SourceMod
+        uses: KatsuteTF/Workflows/actions/setup-sourcepawn@main
+
+      - name: mkdir include
+        shell: bash
+        run: mkdir -p addons/sourcemod/include
+
+      - name: Install SourceScramble
+        uses: KatsuteTF/Workflows/actions/curl@main
+        with:
+          url: https://raw.githubusercontent.com/nosoop/SMExt-SourceScramble/master/scripting/include/sourcescramble.inc
+          file: addons/sourcemod/include/sourcescramble.inc
+
+      - name: Compile Plugin
+        run: |
+          spcomp -i addons/sourcemod/include TF100.sp
+
+      - name: Deploy to GitHub Releases
+        uses: AButler/upload-release-assets@v2.0.2
+        with:
+          files: "TF100.smx;TF100.txt;whitelist.txt"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

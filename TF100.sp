@@ -6,6 +6,33 @@
 #include <sdktools>
 #include <sourcescramble>
 
+static const int len = 22;
+
+static const char entities[22][] = {
+    "tf_ragdoll",
+    "prop_ragdoll",
+    "entity_bird",
+    "keyframe_rope",
+    "move_rope",
+    "prop_physics",
+    "prop_physics_multiplayer",
+    "prop_physics_override",
+    "prop_physics_respawnable",
+    "info_particle_system",
+    "env_ambient_light",
+    "env_dustpuff",
+    "env_dusttrail",
+    "env_funnel",
+    "env_lightglow",
+    "env_particlelight",
+    "env_smokestack",
+    "env_smoketrail",
+    "env_splash",
+    "env_sporeexplosion",
+    "env_spritetrail",
+    "point_spotlight"
+};
+
 public Plugin myinfo = {
     name        = "TF100",
     author      = "Katsute",
@@ -91,13 +118,12 @@ public void OnPluginStart(){
     FindConVar("sv_client_max_interp_ratio").SetInt(2);
     FindConVar("sv_client_min_interp_ratio").SetInt(1);
 
-    // Map Edicts
-    DeleteEntities("keyframe_rope");
-    DeleteEntities("move_rope");
-    DeleteEntities("prop_physics");
-    DeleteEntities("prop_physics_override");
-    DeleteEntities("info_particle_system");
-    DeleteEntities("point_spotlight");
+    // Map Entities
+    for(int i = 0; i < len; i++)
+        DeleteEntities(entities[i]);
+
+    // Voice Commands
+    AddCommandListener(DisableCommand, "voicemenu");
 
     // Whitelist Patch https://github.com/sapphonie/tf2rue
     GameData gamedata = LoadGameConfigFile("tf2.100"); // https://github.com/sapphonie/tf2rue/blob/main/gamedata/tf2.rue.txt
@@ -113,16 +139,20 @@ public void OnPluginStart(){
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
-    if(
-        StrEqual(classname, "tf_ragdoll") || StrEqual(classname, "prop_ragdoll") ||
-        StrEqual(classname, "keyframe_rope") || StrEqual(classname, "move_rope") ||
-        StrEqual(classname, "entity_bird") ||
-        ((StrEqual(classname, "tf_ammo_pack") || StrEqual(classname, "item_healthkit_small")) && HasEntProp(entity, Prop_Send, "m_hOwnerEntity")) ||
-        StrEqual(classname, "prop_physics") || StrEqual(classname, "prop_physics_override") ||
-        StrEqual(classname, "info_particle_system") ||
-        StrEqual(classname, "point_spotlight")
-    )
+    for(int i = 0; i < len; i++)
+        if(StrEqual(classname, entities[i])){
+            DeleteEntity(entity);
+            return;
+        }
+
+    if(StrEqual(classname, "tf_ammo_pack"))
         DeleteEntity(entity);
+    else if(StrEqual("item_healthkit_small"), StrEqual("item_healthkit_medium")){
+        char model[256];
+		GetEntPropString(entity, Prop_Data, "m_ModelName", model, 256);
+        if(!StrContains(model, "plate", false))
+            DeleteEntity(entity);
+    }
 }
 
 public void DeleteEntity(const int entity){
@@ -134,4 +164,8 @@ public void DeleteEntities(const char[] classname){
     int entity = -1;
     while((entity = FindEntityByClassname(entity, classname)) != -1)
         DeleteEntity(entity);
+}
+
+public Action DisableCommand(const int client, const char[] command, const int args){
+    return Plugin_Stop;
 }

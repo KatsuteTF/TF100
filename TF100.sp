@@ -107,7 +107,8 @@ public void OnPluginStart(){
         MemoryPatch mpatch = MemoryPatch.CreateFromConf(gamedata, "CEconItemSystem::ReloadWhitelist::nopnop");
         if(!mpatch.Validate())
             ThrowError("Failed to verify CEconItemSystem::ReloadWhitelist::nopnop");
-        mpatch.Enable();
+        if(!mpatch.Enable())
+            ThrowError("Failed to enable patch for CEconItemSystem::ReloadWhitelist::nopnop");
     }
 }
 
@@ -122,17 +123,11 @@ public void OnEntityCreated(int entity, const char[] classname){
         StrEqual(classname, "point_spotlight")
     )
         DeleteEntity(entity);
-    // else if(StrEqual(classname, "prop_physics_override") && HasEntProp(entity, Prop_Data, "m_ModelName")){
-    //     char model[64];
-    //     GetEntPropString(entity, Prop_Data, "m_ModelName", model, 64);
-    //     if(strncmp(model, "c_bread_", 8))
-    //         DeleteEntity(entity);
-    // }
 }
 
 public void DeleteEntity(const int entity){
     if(IsValidEntity(entity))
-        AcceptEntityInput(entity, "Kill");
+        RemoveEntity(entity);
 }
 
 public void DeleteEntities(const char[] classname){

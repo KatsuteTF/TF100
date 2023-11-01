@@ -28,8 +28,15 @@ jobs:
         run: |
           spcomp -i addons/sourcemod/include TF100.sp
 
+      - name: Prepare files
+        run: |
+          mkdir addons/sourcemod/scripting
+          mv TF100.smx addons/sourcemod/scripting
+          mkdir addons/sourcemod/gamedata
+          mv tf2.100.txt addons/sourcemod/gamedata
+
       - name: Deploy to GitHub Releases
         uses: AButler/upload-release-assets@v2.0.2
         with:
-          files: "TF100.smx;tf2.100.txt;whitelist.txt"
+          files: "addons/*;item_whitelist.txt"
           repo-token: ${{ secrets.GITHUB_TOKEN }}

@@ -6,9 +6,9 @@
 #include <sdktools>
 #include <sourcescramble>
 
-static const int len = 22;
+static const int len = 23;
 
-static const char entities[22][] = {
+static const char entities[23][] = {
     "tf_ragdoll",
     "prop_ragdoll",
     "entity_bird",
@@ -30,6 +30,7 @@ static const char entities[22][] = {
     "env_splash",
     "env_sporeexplosion",
     "env_spritetrail",
+    "light_spot",
     "point_spotlight"
 };
 
@@ -147,9 +148,9 @@ public void OnEntityCreated(int entity, const char[] classname){
 
     if(StrEqual(classname, "tf_ammo_pack"))
         DeleteEntity(entity);
-    else if(StrEqual("item_healthkit_small"), StrEqual("item_healthkit_medium")){
+    else if(StrEqual(classname, "item_healthkit_small"), StrEqual(classname, "item_healthkit_medium")){
         char model[256];
-		GetEntPropString(entity, Prop_Data, "m_ModelName", model, 256);
+        GetEntPropString(entity, Prop_Data, "m_ModelName", model, 256);
         if(!StrContains(model, "plate", false))
             DeleteEntity(entity);
     }

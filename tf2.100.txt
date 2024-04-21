@@ -4,30 +4,37 @@
     {
         "Signatures"
         {
-            "CEconItemSystem::ReloadWhitelist"
+            "GetLoadoutItem"
             {
-                "library"   "server"
-                "linux"     "@_ZN15CEconItemSystem15ReloadWhitelistEv"
-                "windows"   "\x55\x8B\xEC\x83\xEC\x0C\x53\x56\x57\x8B\xD9\xC6\x45\xFF\x01"
+                "library"    "server"
+                "windows" "\x55\x89\xE5\x57\x56\x53\x83\xEC\x3C\x8B\x45\x14\x8B\x7D\x08\x8B\x5D\x0C"
+                "linux" "@_ZN9CTFPlayer14GetLoadoutItemEiib"
+            }
+
+            "ReloadWhitelist"
+            {
+                "library"    "server"
+                "windows" "\x55\x89\xE5\x57\x56\x53\x83\xEC\x2C\xC7\x04\x24\x20\x00\x00\x00\x8B\x75\x08\xE8\x2A\x2A\x2A\x2A\xC7\x44\x24\x04\x2A\x2A\x2A\x2A\x89\x04\x24\x89\xC3"
+                "linux" "@_ZN15CEconItemSystem15ReloadWhitelistEv"
             }
         }
-        "MemPatches"
+
+        "Functions"
         {
-            "CEconItemSystem::ReloadWhitelist::nopnop"
+            "GetLoadoutItem"
             {
-                "signature"     "CEconItemSystem::ReloadWhitelist"
-                "linux"
-                {
-                    "offset"    "34h"
-                    "verify"    "\x74\x53"
-                    "patch"     "\x90\x90"
-                }
-                "windows"
-                {
-                    "offset"    "45h"
-                    "verify"    "\x74\x6C"
-                    "patch"     "\x90\x90"
-                }
+                "signature" "GetLoadoutItem"
+                "callconv" "thiscall"
+                "this" "entity"
+                "return" "int"
+            }
+
+            "ReloadWhitelist"
+            {
+                "signature" "ReloadWhitelist"
+                "callconv" "thiscall"
+                "this" "ignore"
+                "return" "void"
             }
         }
     }

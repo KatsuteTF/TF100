@@ -1,11 +1,3 @@
-<table align="center">
-    <tr>
-        <td>
-            <div align="center">⚠️ Development on this project has been suspended indefinitely ⚠️</div>
-        </td>
-    </tr>
-</table>
-
 ### [TF2] TF100
 
 100 player server optimization plugin; removes several map entities and optimizes network configurations

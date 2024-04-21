@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Katsute | Licensed under CC BY-NC-SA 4.0
+// Copyright (C) 2024 Katsute | Licensed under CC BY-NC-SA 4.0
 
 #pragma semicolon 1
 
@@ -126,17 +126,9 @@ public void OnPluginStart(){
     // Voice Commands
     AddCommandListener(DisableCommand, "voicemenu");
 
-    // Whitelist Patch https://github.com/sapphonie/tf2rue
-    GameData gamedata = LoadGameConfigFile("tf2.100"); // https://github.com/sapphonie/tf2rue/blob/main/gamedata/tf2.rue.txt
-    if(gamedata == null){
-        SetFailState("Failed to load TF100 gamedata");
-    }else{
-        MemoryPatch mpatch = MemoryPatch.CreateFromConf(gamedata, "CEconItemSystem::ReloadWhitelist::nopnop");
-        if(!mpatch.Validate())
-            ThrowError("Failed to verify CEconItemSystem::ReloadWhitelist::nopnop");
-        if(!mpatch.Enable())
-            ThrowError("Failed to enable patch for CEconItemSystem::ReloadWhitelist::nopnop");
-    }
+    // Whitelist Patch
+
+    // todo
 }
 
 public void OnEntityCreated(int entity, const char[] classname){

@@ -2,9 +2,11 @@
 
 #pragma semicolon 1
 
+#include <dhooks>
 #include <sourcemod>
 #include <sdktools>
-#include <sourcescramble>
+
+ConVar mp_tournament;
 
 static const int len = 23;
 
@@ -126,9 +128,22 @@ public void OnPluginStart(){
     // Voice Commands
     AddCommandListener(DisableCommand, "voicemenu");
 
-    // Whitelist Patch
+    // Whitelist Patch https://forums.alliedmods.net/showthread.php?t=346702
 
-    // todo
+    mp_tournament = FindConVar("mp_tournament");
+    mp_tournament.Flags &= ~FCVAR_NOTIFY;
+
+    Handle gamedata = LoadGameConfigFile("tf2.100");
+
+    // broken ↓
+    Handle hookReload = DHookCreateFromConf(gamedata, "ReloadWhitelist");
+    DHookEnableDetour(hookReload, false, TournamentEnable);
+	DHookEnableDetour(hookReload, true, TournamentDisable);
+
+    // broken ↓
+    Handle hookLoadout = DHookCreateFromConf(gamedata, "GetLoadoutItem");
+	DHookEnableDetour(hookLoadout, false, TournamentEnable);
+	DHookEnableDetour(hookLoadout, true, TournamentDisable);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
@@ -161,4 +176,14 @@ public void DeleteEntities(const char[] classname){
 
 public Action DisableCommand(const int client, const char[] command, const int args){
     return Plugin_Stop;
+}
+
+MRESReturn TournamentEnable(int entity, DHookReturn hReturn) {
+	mp_tournament.SetBool(true, true, false);
+	return MRES_Ignored;
+}
+
+MRESReturn TournamentDisable(int entity, DHookReturn hReturn) {
+	mp_tournament.SetBool(false, true, false);
+	return MRES_Ignored;
 }

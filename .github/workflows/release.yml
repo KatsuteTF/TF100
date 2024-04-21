@@ -1,4 +1,5 @@
 name: Release
+
 on:
   release:
     types: [published]
@@ -18,18 +19,11 @@ jobs:
         shell: bash
         run: mkdir -p addons/sourcemod/include
 
-      - name: Install SourceScramble
-        uses: KatsuteTF/Workflows/actions/curl@main
-        with:
-          url: https://raw.githubusercontent.com/nosoop/SMExt-SourceScramble/master/scripting/include/sourcescramble.inc
-          file: addons/sourcemod/include/sourcescramble.inc
-
       - name: Compile Plugin
-        run: |
-          spcomp -i addons/sourcemod/include TF100.sp
+        run: spcomp -i addons/sourcemod/include TF100.sp
 
       - name: Prepare Files
-        run: |
+        run: |-
           mkdir addons/sourcemod/scripting
           mv TF100.smx addons/sourcemod/scripting
           mkdir addons/sourcemod/gamedata

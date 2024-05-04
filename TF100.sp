@@ -6,11 +6,11 @@
 #include <sourcemod>
 #include <sdktools>
 
-ConVar mp_tournament;
+// ConVar mp_tournament;
 
-static const int len = 23;
+static const int len = 22;
 
-static const char entities[23][] = {
+static const char entities[22][] = {
     "tf_ragdoll",
     "prop_ragdoll",
     "entity_bird",
@@ -18,7 +18,7 @@ static const char entities[23][] = {
     "move_rope",
     "prop_physics",
     "prop_physics_multiplayer",
-    "prop_physics_override",
+    // "prop_physics_override", // payload
     "prop_physics_respawnable",
     "info_particle_system",
     "env_ambient_light",
@@ -125,25 +125,22 @@ public void OnPluginStart(){
     for(int i = 0; i < len; i++)
         DeleteEntities(entities[i]);
 
-    // Voice Commands
-    AddCommandListener(DisableCommand, "voicemenu");
+    // // Whitelist Patch https://forums.alliedmods.net/showthread.php?t=346702
 
-    // Whitelist Patch https://forums.alliedmods.net/showthread.php?t=346702
+    // mp_tournament = FindConVar("mp_tournament");
+    // mp_tournament.Flags &= ~FCVAR_NOTIFY;
 
-    mp_tournament = FindConVar("mp_tournament");
-    mp_tournament.Flags &= ~FCVAR_NOTIFY;
+    // Handle gamedata = LoadGameConfigFile("tf2.100");
 
-    Handle gamedata = LoadGameConfigFile("tf2.100");
+    // // broken ↓
+    // Handle hookReload = DHookCreateFromConf(gamedata, "ReloadWhitelist");
+    // DHookEnableDetour(hookReload, false, TournamentEnable);
+	// DHookEnableDetour(hookReload, true, TournamentDisable);
 
-    // broken ↓
-    Handle hookReload = DHookCreateFromConf(gamedata, "ReloadWhitelist");
-    DHookEnableDetour(hookReload, false, TournamentEnable);
-	DHookEnableDetour(hookReload, true, TournamentDisable);
-
-    // broken ↓
-    Handle hookLoadout = DHookCreateFromConf(gamedata, "GetLoadoutItem");
-	DHookEnableDetour(hookLoadout, false, TournamentEnable);
-	DHookEnableDetour(hookLoadout, true, TournamentDisable);
+    // // broken ↓
+    // Handle hookLoadout = DHookCreateFromConf(gamedata, "GetLoadoutItem");
+	// DHookEnableDetour(hookLoadout, false, TournamentEnable);
+	// DHookEnableDetour(hookLoadout, true, TournamentDisable);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
@@ -155,7 +152,7 @@ public void OnEntityCreated(int entity, const char[] classname){
 
     if(StrEqual(classname, "tf_ammo_pack"))
         DeleteEntity(entity);
-    else if(StrEqual(classname, "item_healthkit_small"), StrEqual(classname, "item_healthkit_medium")){
+    else if(StrEqual(classname, "item_healthkit_small") || StrEqual(classname, "item_healthkit_medium")){
         char model[256];
         GetEntPropString(entity, Prop_Data, "m_ModelName", model, 256);
         if(!StrContains(model, "plate", false))
@@ -174,16 +171,12 @@ public void DeleteEntities(const char[] classname){
         DeleteEntity(entity);
 }
 
-public Action DisableCommand(const int client, const char[] command, const int args){
-    return Plugin_Stop;
-}
+// MRESReturn TournamentEnable(int entity, DHookReturn hReturn) {
+// 	mp_tournament.SetBool(true, true, false);
+// 	return MRES_Ignored;
+// }
 
-MRESReturn TournamentEnable(int entity, DHookReturn hReturn) {
-	mp_tournament.SetBool(true, true, false);
-	return MRES_Ignored;
-}
-
-MRESReturn TournamentDisable(int entity, DHookReturn hReturn) {
-	mp_tournament.SetBool(false, true, false);
-	return MRES_Ignored;
-}
+// MRESReturn TournamentDisable(int entity, DHookReturn hReturn) {
+// 	mp_tournament.SetBool(false, true, false);
+// 	return MRES_Ignored;
+// }

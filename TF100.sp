@@ -135,12 +135,12 @@ public void OnPluginStart(){
     // // broken ↓
     // Handle hookReload = DHookCreateFromConf(gamedata, "ReloadWhitelist");
     // DHookEnableDetour(hookReload, false, TournamentEnable);
-	// DHookEnableDetour(hookReload, true, TournamentDisable);
+    // DHookEnableDetour(hookReload, true, TournamentDisable);
 
     // // broken ↓
     // Handle hookLoadout = DHookCreateFromConf(gamedata, "GetLoadoutItem");
-	// DHookEnableDetour(hookLoadout, false, TournamentEnable);
-	// DHookEnableDetour(hookLoadout, true, TournamentDisable);
+    // DHookEnableDetour(hookLoadout, false, TournamentEnable);
+    // DHookEnableDetour(hookLoadout, true, TournamentDisable);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
@@ -172,11 +172,11 @@ public void DeleteEntities(const char[] classname){
 }
 
 // MRESReturn TournamentEnable(int entity, DHookReturn hReturn) {
-// 	mp_tournament.SetBool(true, true, false);
-// 	return MRES_Ignored;
+//     mp_tournament.SetBool(true, true, false);
+//     return MRES_Ignored;
 // }
 
 // MRESReturn TournamentDisable(int entity, DHookReturn hReturn) {
-// 	mp_tournament.SetBool(false, true, false);
-// 	return MRES_Ignored;
+//     mp_tournament.SetBool(false, true, false);
+//     return MRES_Ignored;
 // }

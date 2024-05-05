@@ -8,19 +8,10 @@
 
 // ConVar mp_tournament;
 
-static const int len = 22;
+static const int len = 27;
 
-static const char entities[22][] = {
-    "tf_ragdoll",
-    "prop_ragdoll",
+static const char entities[27][] = {
     "entity_bird",
-    "keyframe_rope",
-    "move_rope",
-    "prop_physics",
-    "prop_physics_multiplayer",
-    // "prop_physics_override", // payload
-    "prop_physics_respawnable",
-    "info_particle_system",
     "env_ambient_light",
     "env_dustpuff",
     "env_dusttrail",
@@ -29,11 +20,25 @@ static const char entities[22][] = {
     "env_particlelight",
     "env_smokestack",
     "env_smoketrail",
+    "env_sniperdot",
     "env_splash",
     "env_sporeexplosion",
     "env_spritetrail",
+    "halloween_souls_pack",
+    "info_particle_system",
+    "instanced_scripted_scene",
+    "keyframe_rope",
     "light_spot",
-    "point_spotlight"
+    "move_rope",
+    "point_spotlight",
+    "prop_physics_multiplayer",
+    // "prop_physics_override", // payload
+    "prop_physics_respawnable",
+    "prop_physics",
+    "prop_ragdoll",
+    "tf_ammo_pack",
+    "tf_dropped_weapon",
+    "tf_ragdoll"
 };
 
 public Plugin myinfo = {
@@ -150,14 +155,13 @@ public void OnEntityCreated(int entity, const char[] classname){
             return;
         }
 
-    if(StrEqual(classname, "tf_ammo_pack"))
-        DeleteEntity(entity);
-    else if(StrEqual(classname, "item_healthkit_small") || StrEqual(classname, "item_healthkit_medium")){
-        char model[256];
-        GetEntPropString(entity, Prop_Data, "m_ModelName", model, 256);
-        if(!StrContains(model, "plate", false))
-            DeleteEntity(entity);
-    }
+    // doesn't work b/c model hasn't been set yet
+    // if(StrEqual(classname, "item_healthkit_small") || StrEqual(classname, "item_healthkit_medium")){
+    //     char model[256];
+    //     GetEntPropString(entity, Prop_Data, "m_ModelName", model, 256);
+    //     if(!StrContains(model, "plate"))
+    //         DeleteEntity(entity);
+    // }
 }
 
 public void DeleteEntity(const int entity){

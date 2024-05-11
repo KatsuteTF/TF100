@@ -8,9 +8,10 @@
 
 // ConVar mp_tournament;
 
-static const int len = 27;
+static const int len = 33;
 
-static const char entities[27][] = {
+static const char entities[33][] = {
+    "ambient_generic",
     "entity_bird",
     "env_ambient_light",
     "env_dustpuff",
@@ -21,18 +22,23 @@ static const char entities[27][] = {
     "env_smokestack",
     "env_smoketrail",
     "env_sniperdot",
+    "env_soundscape_proxy",
+    "env_soundscape_triggerable",
+    "env_soundscape",
     "env_splash",
     "env_sporeexplosion",
+    "env_sprite",
     "env_spritetrail",
     "halloween_souls_pack",
     "info_particle_system",
     "keyframe_rope",
+    "light_environment",
     "light_spot",
     "move_rope",
     "point_spotlight",
     "prop_physics_multiplayer",
-    // "prop_physics_override", // payload
     "prop_physics_respawnable",
+    // "prop_physics_override", // payload
     "prop_physics",
     "prop_ragdoll",
     "tf_ammo_pack",

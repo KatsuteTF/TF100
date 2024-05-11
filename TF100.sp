@@ -26,7 +26,6 @@ static const char entities[27][] = {
     "env_spritetrail",
     "halloween_souls_pack",
     "info_particle_system",
-    "instanced_scripted_scene",
     "keyframe_rope",
     "light_spot",
     "move_rope",
@@ -38,7 +37,8 @@ static const char entities[27][] = {
     "prop_ragdoll",
     "tf_ammo_pack",
     "tf_dropped_weapon",
-    "tf_ragdoll"
+    "tf_ragdoll",
+    "tf_wearable"
 };
 
 public Plugin myinfo = {

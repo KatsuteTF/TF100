@@ -8,9 +8,9 @@
 
 // ConVar mp_tournament;
 
-static const int len = 33;
+static const int len = 32;
 
-static const char entities[33][] = {
+static const char entities[32][] = {
     "ambient_generic",
     "entity_bird",
     "env_ambient_light",
@@ -37,14 +37,13 @@ static const char entities[33][] = {
     "move_rope",
     "point_spotlight",
     "prop_physics_multiplayer",
-    "prop_physics_respawnable",
     // "prop_physics_override", // payload
+    "prop_physics_respawnable",
     "prop_physics",
     "prop_ragdoll",
     "tf_ammo_pack",
     "tf_dropped_weapon",
-    "tf_ragdoll",
-    "tf_wearable"
+    "tf_ragdoll"
 };
 
 public Plugin myinfo = {

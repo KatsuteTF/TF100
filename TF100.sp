@@ -6,8 +6,6 @@
 #include <sourcemod>
 #include <sdktools>
 
-// ConVar mp_tournament;
-
 static const int len = 32;
 
 static const char entities[32][] = {
@@ -37,7 +35,6 @@ static const char entities[32][] = {
     "move_rope",
     "point_spotlight",
     "prop_physics_multiplayer",
-    // "prop_physics_override", // payload
     "prop_physics_respawnable",
     "prop_physics",
     "prop_ragdoll",
@@ -134,23 +131,6 @@ public void OnPluginStart(){
     // Map Entities
     for(int i = 0; i < len; i++)
         DeleteEntities(entities[i]);
-
-    // // Whitelist Patch https://forums.alliedmods.net/showthread.php?t=346702
-
-    // mp_tournament = FindConVar("mp_tournament");
-    // mp_tournament.Flags &= ~FCVAR_NOTIFY;
-
-    // Handle gamedata = LoadGameConfigFile("tf2.100");
-
-    // // broken ↓
-    // Handle hookReload = DHookCreateFromConf(gamedata, "ReloadWhitelist");
-    // DHookEnableDetour(hookReload, false, TournamentEnable);
-    // DHookEnableDetour(hookReload, true, TournamentDisable);
-
-    // // broken ↓
-    // Handle hookLoadout = DHookCreateFromConf(gamedata, "GetLoadoutItem");
-    // DHookEnableDetour(hookLoadout, false, TournamentEnable);
-    // DHookEnableDetour(hookLoadout, true, TournamentDisable);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
@@ -159,14 +139,6 @@ public void OnEntityCreated(int entity, const char[] classname){
             DeleteEntity(entity);
             return;
         }
-
-    // doesn't work b/c model hasn't been set yet
-    // if(StrEqual(classname, "item_healthkit_small") || StrEqual(classname, "item_healthkit_medium")){
-    //     char model[256];
-    //     GetEntPropString(entity, Prop_Data, "m_ModelName", model, 256);
-    //     if(!StrContains(model, "plate"))
-    //         DeleteEntity(entity);
-    // }
 }
 
 public void DeleteEntity(const int entity){
@@ -179,13 +151,3 @@ public void DeleteEntities(const char[] classname){
     while((entity = FindEntityByClassname(entity, classname)) != -1)
         DeleteEntity(entity);
 }
-
-// MRESReturn TournamentEnable(int entity, DHookReturn hReturn) {
-//     mp_tournament.SetBool(true, true, false);
-//     return MRES_Ignored;
-// }
-
-// MRESReturn TournamentDisable(int entity, DHookReturn hReturn) {
-//     mp_tournament.SetBool(false, true, false);
-//     return MRES_Ignored;
-// }

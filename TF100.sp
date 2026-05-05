@@ -4,6 +4,7 @@
 
 #include <sourcemod>
 #include <sdktools>
+#include <sdkhooks>
 
 static const int len = 31;
 
@@ -40,8 +41,6 @@ static const char entities[31][] = {
     "tf_dropped_weapon",
     "tf_ragdoll"
 };
-
-static bool bBuildingDestroyed = false;
 
 public Plugin myinfo = {
     name        = "TF100",
@@ -129,17 +128,13 @@ public void OnPluginStart(){
     FindConVar("sv_client_min_interp_ratio").SetInt(1);
 
     // Map Entities
-    HookEvent("object_destroyed", Event_ObjectDestroyed);
     for(int i = 0; i < len; i++)
         DeleteEntities(entities[i]);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
-    // tf_ammo_pack is handled separately: only delete packs spawned from building destruction
-    // (it is intentionally not in the entities array)
     if(StrEqual(classname, "tf_ammo_pack")){
-        if(bBuildingDestroyed)
-            DeleteEntity(entity);
+        SDKHook(entity, SDKHook_SpawnPost, OnAmmoPack_SpawnPost);
         return;
     }
     for(int i = 0; i < len; i++)
@@ -149,14 +144,11 @@ public void OnEntityCreated(int entity, const char[] classname){
         }
 }
 
-public Action Event_ObjectDestroyed(Event event, const char[] name, bool dontBroadcast){
-    bBuildingDestroyed = true;
-    RequestFrame(ClearBuildingDestroyedFlag, 0);
-    return Plugin_Continue;
-}
-
-public void ClearBuildingDestroyedFlag(any data){
-    bBuildingDestroyed = false;
+public void OnAmmoPack_SpawnPost(int entity){
+    char model[PLATFORM_MAX_PATH];
+    GetEntPropString(entity, Prop_Data, "m_ModelName", model, sizeof(model));
+    if(StrContains(model, "models/items/ammopack") == -1)
+        DeleteEntity(entity);
 }
 
 public void DeleteEntity(const int entity){

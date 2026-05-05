@@ -133,10 +133,7 @@ public void OnPluginStart(){
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
-    if(StrEqual(classname, "tf_ammo_pack")){
-        SDKHook(entity, SDKHook_SpawnPost, OnAmmoPack_SpawnPost);
-        return;
-    }
+    SDKHook(entity, SDKHook_SpawnPost, OnEntity_SpawnPost);
     for(int i = 0; i < len; i++)
         if(StrEqual(classname, entities[i])){
             DeleteEntity(entity);
@@ -144,7 +141,7 @@ public void OnEntityCreated(int entity, const char[] classname){
         }
 }
 
-public void OnAmmoPack_SpawnPost(int entity){
+public void OnEntity_SpawnPost(int entity){
     char model[PLATFORM_MAX_PATH];
     GetEntPropString(entity, Prop_Data, "m_ModelName", model, sizeof(model));
     if(StrContains(model, "models/buildables/gibs/") != -1)

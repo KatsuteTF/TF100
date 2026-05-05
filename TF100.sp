@@ -133,19 +133,17 @@ public void OnPluginStart(){
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
-    SDKHook(entity, SDKHook_SpawnPost, OnEntity_SpawnPost);
+    char model[PLATFORM_MAX_PATH];
+    GetEntPropString(entity, Prop_Data, "m_ModelName", model, sizeof(model));
+    if(StrContains(model, "models/buildables/gibs/") != -1){
+        DeleteEntity(entity);
+        return;
+    }
     for(int i = 0; i < len; i++)
         if(StrEqual(classname, entities[i])){
             DeleteEntity(entity);
             return;
         }
-}
-
-public void OnEntity_SpawnPost(int entity){
-    char model[PLATFORM_MAX_PATH];
-    GetEntPropString(entity, Prop_Data, "m_ModelName", model, sizeof(model));
-    if(StrContains(model, "models/buildables/gibs/") != -1)
-        DeleteEntity(entity);
 }
 
 public void DeleteEntity(const int entity){

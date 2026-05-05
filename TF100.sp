@@ -8,6 +8,7 @@
 static const int len = 32;
 
 static const char entities[32][] = {
+
     "ambient_generic",
     "entity_bird",
     "env_ambient_light",
@@ -40,6 +41,21 @@ static const char entities[32][] = {
     "tf_ammo_pack",
     "tf_dropped_weapon",
     "tf_ragdoll"
+};
+
+// Item definition indices for wearable items that have gameplay effects and must be preserved.
+// Purely visual tf_wearable entities (e.g. cosmetic medipacks, soldier backpacks) are removed.
+// Note: demo shields use a separate entity type (tf_wearable_demoshield) and are unaffected.
+static const int wearableWeaponsLen = 8;
+static const int wearableWeapons[8] = {
+    57,     // The Razorback
+    133,    // The Gunboats
+    231,    // Darwin's Danger Shield
+    405,    // Ali Baba's Wee Booties
+    444,    // The Mantreads
+    497,    // The Bootlegger
+    1099,   // The Cozy Camper
+    1101    // The B.A.S.E. Jumper
 };
 
 public Plugin myinfo = {
@@ -130,14 +146,38 @@ public void OnPluginStart(){
     // Map Entities
     for(int i = 0; i < len; i++)
         DeleteEntities(entities[i]);
+
+    // Non-weapon wearables (purely visual, e.g. cosmetic medipacks, soldier backpacks)
+    // Wearable weapons (Gunboats, Mantreads, Booties, etc.) and demo shields are preserved.
+    int wearable = -1;
+    while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1)
+        if(!IsWearableWeapon(wearable))
+            DeleteEntity(wearable);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
+    if(StrEqual(classname, "tf_wearable")){
+        RequestFrame(CheckWearable, entity);
+        return;
+    }
     for(int i = 0; i < len; i++)
         if(StrEqual(classname, entities[i])){
             DeleteEntity(entity);
             return;
         }
+}
+
+public void CheckWearable(any entity){
+    if(IsValidEntity(entity) && !IsWearableWeapon(entity))
+        DeleteEntity(entity);
+}
+
+public bool IsWearableWeapon(const int entity){
+    int defIndex = GetEntProp(entity, Prop_Send, "m_iItemDefinitionIndex");
+    for(int i = 0; i < wearableWeaponsLen; i++)
+        if(wearableWeapons[i] == defIndex)
+            return true;
+    return false;
 }
 
 public void DeleteEntity(const int entity){

@@ -5,9 +5,9 @@
 #include <sourcemod>
 #include <sdktools>
 
-static const int len = 32;
+static const int len = 31;
 
-static const char entities[32][] = {
+static const char entities[31][] = {
     "ambient_generic",
     "entity_bird",
     "env_ambient_light",
@@ -37,10 +37,11 @@ static const char entities[32][] = {
     "prop_physics_respawnable",
     "prop_physics",
     "prop_ragdoll",
-    "tf_ammo_pack",
     "tf_dropped_weapon",
     "tf_ragdoll"
 };
+
+static bool bBuildingDestroyed = false;
 
 public Plugin myinfo = {
     name        = "TF100",
@@ -128,16 +129,34 @@ public void OnPluginStart(){
     FindConVar("sv_client_min_interp_ratio").SetInt(1);
 
     // Map Entities
+    HookEvent("object_destroyed", Event_ObjectDestroyed);
     for(int i = 0; i < len; i++)
         DeleteEntities(entities[i]);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
+    // tf_ammo_pack is handled separately: only delete packs spawned from building destruction
+    // (it is intentionally not in the entities array)
+    if(StrEqual(classname, "tf_ammo_pack")){
+        if(bBuildingDestroyed)
+            DeleteEntity(entity);
+        return;
+    }
     for(int i = 0; i < len; i++)
         if(StrEqual(classname, entities[i])){
             DeleteEntity(entity);
             return;
         }
+}
+
+public Action Event_ObjectDestroyed(Event event, const char[] name, bool dontBroadcast){
+    bBuildingDestroyed = true;
+    RequestFrame(ClearBuildingDestroyedFlag, 0);
+    return Plugin_Continue;
+}
+
+public void ClearBuildingDestroyedFlag(any data){
+    bBuildingDestroyed = false;
 }
 
 public void DeleteEntity(const int entity){

@@ -147,7 +147,7 @@ public void OnEntityCreated(int entity, const char[] classname){
 public void OnAmmoPack_SpawnPost(int entity){
     char model[PLATFORM_MAX_PATH];
     GetEntPropString(entity, Prop_Data, "m_ModelName", model, sizeof(model));
-    if(StrContains(model, "models/items/ammopack") == -1)
+    if(StrContains(model, "models/buildables/gibs/") != -1)
         DeleteEntity(entity);
 }
 

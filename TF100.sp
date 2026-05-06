@@ -1,13 +1,14 @@
-// Copyright (C) 2025 Katsute | Licensed under CC BY-NC-SA 4.0
+// Copyright (C) 2026 Katsute | Licensed under CC BY-NC-SA 4.0
 
 #pragma semicolon 1
 
 #include <sourcemod>
 #include <sdktools>
+#include <sdkhooks>
 
-static const int len = 32;
+static const int len = 31;
 
-static const char entities[32][] = {
+static const char entities[31][] = {
     "ambient_generic",
     "entity_bird",
     "env_ambient_light",
@@ -37,7 +38,6 @@ static const char entities[32][] = {
     "prop_physics_respawnable",
     "prop_physics",
     "prop_ragdoll",
-    "tf_ammo_pack",
     "tf_dropped_weapon",
     "tf_ragdoll"
 };
@@ -46,7 +46,7 @@ public Plugin myinfo = {
     name        = "TF100",
     author      = "Katsute",
     description = "Optimizations for 100 player servers",
-    version     = "1.0",
+    version     = "2.0",
     url         = "https://github.com/KatsuteTF/TF100"
 }
 
@@ -133,11 +133,19 @@ public void OnPluginStart(){
 }
 
 public void OnEntityCreated(int entity, const char[] classname){
+    SDKHook(entity, SDKHook_SpawnPost, OnEntity_SpawnPost);
     for(int i = 0; i < len; i++)
         if(StrEqual(classname, entities[i])){
             DeleteEntity(entity);
             return;
         }
+}
+
+public void OnEntity_SpawnPost(int entity){
+    char model[PLATFORM_MAX_PATH];
+    GetEntPropString(entity, Prop_Data, "m_ModelName", model, sizeof(model));
+    if(StrContains(model, "models/buildables/gibs/") != -1)
+        DeleteEntity(entity);
 }
 
 public void DeleteEntity(const int entity){

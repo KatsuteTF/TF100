@@ -6,9 +6,9 @@
 #include <sdktools>
 #include <sdkhooks>
 
-static const int len = 31;
+static const int len = 34;
 
-static const char entities[31][] = {
+static const char entities[34][] = {
     "ambient_generic",
     "entity_bird",
     "env_ambient_light",
@@ -16,6 +16,7 @@ static const char entities[31][] = {
     "env_dusttrail",
     "env_funnel",
     "env_lightglow",
+    "env_particleemitter",
     "env_particlelight",
     "env_smokestack",
     "env_smoketrail",
@@ -33,7 +34,9 @@ static const char entities[31][] = {
     "light_environment",
     "light_spot",
     "move_rope",
+    "point_camera",
     "point_spotlight",
+    "point_viewcontrol",
     "prop_physics_multiplayer",
     "prop_physics_respawnable",
     "prop_physics",

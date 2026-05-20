@@ -2,6 +2,8 @@
 
 #pragma semicolon 1
 
+#define WHITELIST_FILE "cfg/item_whitelist.txt"
+
 #include <sourcemod>
 #include <sdktools>
 #include <sdkhooks>
@@ -133,7 +135,7 @@ public void OnPluginStart(){
 }
 
 public void OnConfigsExecuted(){
-    ServerCommand("item_whitelist_load cfg/item_whitelist.txt");
+    ServerCommand("item_whitelist_load %s", WHITELIST_FILE);
 }
 
 public void OnEntityCreated(int entity, const char[] classname){

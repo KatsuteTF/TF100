@@ -132,6 +132,10 @@ public void OnPluginStart(){
         DeleteEntities(entities[i]);
 }
 
+public void OnConfigsExecuted(){
+    ServerCommand("item_whitelist_load cfg/item_whitelist.txt");
+}
+
 public void OnEntityCreated(int entity, const char[] classname){
     SDKHook(entity, SDKHook_SpawnPost, OnEntity_SpawnPost);
     for(int i = 0; i < len; i++)
